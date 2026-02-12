@@ -1,104 +1,58 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-12T14:30:38.464Z",
-  "summary": "The diff implements a DaVinci-inspired 3-panel editor layout with a real-time 3D text logo viewport (R3F/Three.js), style/material presets, geometry + rotation controls, lighting/shadow controls, cinematic effects (bloom/rim + Pro-gated particles), background mode selection, export UI and basic exporters (PNG/JPG/SVG/WebM animation), plus in-app Architecture docs and Pricing/Pro-mode scaffolding. Several acceptance-criteria items appear incomplete or only stubbed (notably DOF/motion blur, some export/background correctness details, and reflection/metallic behavior controls).",
+  "generatedAt": "2026-02-12T16:32:42.083Z",
+  "summary": "Diff adds startup/viewport hardening: a viewport-scoped error boundary, safer post-processing (lazy-loaded + try/catch + disable-on-error), WebGL availability/context-loss UI in the viewport, and improved StartupFallbackScreen diagnostics with WebGL diagnostics + copy-to-clipboard. However, some REQ acceptance details are not fully evidenced/implemented (notably explicit root-cause fix/attribution for the original startup crash, and ensuring post-processing module-load failures disable effects with a clear in-app indication).",
   "missing_requirements": [
     {
-      "id": "REQ-3",
-      "requirement": "Add Lighting + Shadows/Reflections controls, including ... a reflection/metalness-like control appropriate to the selected style.",
-      "reason": "LightingControls includes light intensity/angles and shadow toggle/strength/softness, but no explicit reflection/refraction/reflection-strength control is shown there. A generic 'Metalness' slider exists under MaterialControls, but the requirement calls for a reflection/metalness-like behavior control tied to reflective styles and presented as part of lighting/reflection controls.",
+      "id": "REQ-26",
+      "requirement": "Diagnose and fix the root cause of the startup failure so production builds load the normal App UI without immediately rendering StartupFallbackScreen, and ensure any remaining errors are attributable to a clearly identified failing module and are handled/guarded appropriately.",
+      "reason": "The diff shows additional guarding (global startup error listeners with a 5s window; filtering certain non-fatal errors), but it does not demonstrate an identified root cause module or a targeted fix for that original failure. The changes may reduce/avoid some startup crashes, but evidence of a specific root cause diagnosis/fix is not present in the diff summary.",
       "evidence": [
-        "frontend/src/features/editor/inspector/LightingControls.tsx",
-        "frontend/src/features/editor/inspector/MaterialControls.tsx"
+        "frontend/src/features/startup/StartupErrorBoundary.tsx",
+        "frontend/src/App.tsx"
       ]
     },
     {
-      "id": "REQ-4",
-      "requirement": "Provide a Material & Texture system with ... roughness and gloss (or equivalent) sliders, and custom texture upload ... with a clear way to remove/reset it.",
-      "reason": "MaterialControls provides Roughness and Metalness sliders, but no explicit 'Gloss' (or clearly equivalent) control is shown in the visible diff. The custom texture upload is present, but the 'remove/reset' UI is not visible due to file truncation, so it cannot be verified from the provided diff summary.",
+      "id": "REQ-27",
+      "requirement": "If post-processing (EffectComposer/bloom) initialization OR setup fails, continue rendering the core scene and clearly indicate that effects were disabled (without tripping StartupErrorBoundary).",
+      "reason": "While PostProcessing catches initialization/configuration errors and calls disablePostProcessing(...), SafePostProcessing lazy-load failure returns a no-op component but does not call disablePostProcessing or set an error message. In that module-load-failure scenario, the app would silently lose effects and would not trigger the toast-based indication (which depends on state.postProcessingDisabled/postProcessingError).",
       "evidence": [
-        "frontend/src/features/editor/inspector/MaterialControls.tsx (truncated)"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "requirement": "Implement motion blur and depth-of-field style controls for the viewport render ... with an on/off toggle and at least one adjustable parameter for each effect.",
-      "reason": "CameraEffectsControls explicitly marks Depth of Field and Motion Blur as 'Coming Soon' with disabled switches and no adjustable parameters, indicating the feature is not implemented.",
-      "evidence": [
-        "frontend/src/features/editor/inspector/CameraEffectsControls.tsx"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "requirement": "Ensure background selection affects exports as expected (transparent exports preserve alpha when applicable).",
-      "reason": "Background mode selection exists, and the Canvas alpha flag is tied to Transparent mode, but the export functions do not reference background mode and do not render at the requested export resolution; there is no explicit handling ensuring exports match selected background behavior (especially transparent PNG) beyond current canvas state.",
-      "evidence": [
-        "frontend/src/features/editor/inspector/BackgroundControls.tsx",
+        "frontend/src/features/editor/scene/SafePostProcessing.tsx",
+        "frontend/src/features/editor/scene/PostProcessing.tsx",
         "frontend/src/features/editor/LogoViewport.tsx",
-        "frontend/src/features/editor/export/exporters.ts"
+        "frontend/src/features/editor/state/editorState.tsx (mentioned in frontend-file-summaries.txt)"
       ]
     },
     {
-      "id": "REQ-8",
-      "requirement": "Implement Export Options: PNG with transparency, JPG at up to 4K resolution, SVG export, and an animation export ... plus fallback format labeling if MP4 isn't supported.",
-      "reason": "ExportPanel offers a 4K selector and passes width/height to exporters, but exportPNG/exportJPG ignore the width/height arguments and simply call canvas.toDataURL(), so 4K export is not actually implemented. Animation export is hard-coded to WebM (vp9) with no visible UI/logic for MP4 attempt + clearly labeled fallback behavior in the provided diff.",
+      "id": "REQ-27",
+      "requirement": "After a WebGL context loss, the viewport shows the context-lost message and instructs the user to reload (and does not get stuck).",
+      "reason": "LogoViewport adds context loss handling and conditionally renders a 'WebGL Context Lost' message, but the relevant portion of the message is truncated in the diff summary, so it is not verifiable that it explicitly instructs the user to reload, as required.",
       "evidence": [
-        "frontend/src/features/editor/inspector/ExportPanel.tsx (truncated)",
-        "frontend/src/features/editor/export/exporters.ts"
+        "frontend/src/features/editor/LogoViewport.tsx"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Footer attribution link to caffeine.ai with UTM parameters.",
-      "reason": "Not requested in the BuildRequest; adds external branding/attribution behavior.",
+      "description": "Added a 'clear cache' behavior on the global StartupFallbackScreen (clearing localStorage/sessionStorage) beyond the requested diagnostics/copy-details requirements.",
+      "reason": "REQ-28 focuses on including error/stack + WebGL diagnostics and copying both; it does not request a cache-clearing action.",
       "evidence": [
-        "frontend/src/App.tsx"
+        "frontend/src/features/startup/StartupFallbackScreen.tsx"
       ]
     }
   ],
-  "confidence": 0.73,
+  "confidence": 0.64,
   "changed_files": [
-    "all_files_summary.json",
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.css",
-    "frontend/index.html",
     "frontend/src/App.tsx",
-    "frontend/src/features/docs/ArchitecturePipelineScreen.tsx",
-    "frontend/src/features/docs/docsContent.ts",
-    "frontend/src/features/editor/EditorScreen.tsx",
     "frontend/src/features/editor/LogoViewport.tsx",
-    "frontend/src/features/editor/export/exporters.ts",
-    "frontend/src/features/editor/inspector/BackgroundControls.tsx",
-    "frontend/src/features/editor/inspector/CameraEffectsControls.tsx",
-    "frontend/src/features/editor/inspector/EffectsControls.tsx",
-    "frontend/src/features/editor/inspector/ExportPanel.tsx",
-    "frontend/src/features/editor/inspector/GeometryControls.tsx",
-    "frontend/src/features/editor/inspector/InspectorPanel.tsx",
-    "frontend/src/features/editor/inspector/LightingControls.tsx",
-    "frontend/src/features/editor/inspector/MaterialControls.tsx",
-    "frontend/src/features/editor/inspector/TransformControls.tsx",
-    "frontend/src/features/editor/layout/EditorLayout.tsx",
-    "frontend/src/features/editor/logo/ThreeTextLogo.tsx",
-    "frontend/src/features/editor/logo/materials.ts",
-    "frontend/src/features/editor/presets/PresetsPanel.tsx",
-    "frontend/src/features/editor/scene/Background.tsx",
-    "frontend/src/features/editor/scene/LightingRig.tsx",
-    "frontend/src/features/editor/scene/Particles.tsx",
+    "frontend/src/features/editor/components/ViewportErrorBoundary.tsx",
     "frontend/src/features/editor/scene/PostProcessing.tsx",
-    "frontend/src/features/editor/state/editorState.tsx",
-    "frontend/src/features/editor/texture/DragDropTextureTarget.tsx",
-    "frontend/src/features/editor/timeline/TimelineStrip.tsx",
-    "frontend/src/features/pro/FreeVsProPanel.tsx",
-    "frontend/src/features/pro/ProModeContext.tsx",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/useInternetIdentity.ts",
-    "frontend/src/hooks/useQueries.ts",
-    "frontend/src/index.css",
-    "frontend/src/main.tsx",
-    "frontend/tailwind.config.js",
+    "frontend/src/features/editor/scene/SafePostProcessing.tsx",
+    "frontend/src/features/startup/StartupErrorBoundary.tsx",
+    "frontend/src/features/startup/StartupFallbackScreen.tsx",
+    "frontend/src/features/startup/getWebGLDiagnostics.ts",
     "project_state.json"
   ]
 }

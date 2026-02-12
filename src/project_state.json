@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
+  "projectStateVersion": 15,
   "summary": "Build a professional, DaVinci Resolve–inspired web app for cinematic 3D logo creation with AI text-to-logo generation, advanced 3D/material controls, cinematic effects, scene/background tools, and export (static + animation), using React/Next.js with Three.js/Babylon.js and a Node.js/Firebase backend.",
   "architectural_notes": [
     "Frontend: React / Next.js",
@@ -8,9 +8,12 @@
     "Backend: Node.js with Firebase",
     "AI components: Text-to-Design + Style Transfer"
   ],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- App icon: cinematic clapperboard + monogram mark in dark metallic style (app-icon.dim_512x512.png)\n- Wide hero background: subtle dark studio gradient with soft film grain and faint bokeh (hero-bg.dim_1920x1080.png)",
+  "known_issues": [
+    "Deployment failed; production build did not publish successfully so the app is not accessible/opening.",
+    "App loads but hits a startup initialization failure and shows the user-facing StartupFallbackScreen message ('3D Logo Creator failed to initialize properly').",
+    "Startup fallback screen persists in latest live deployment; 3D engine still fails to initialize for user (likely WebGL/renderer init issue)."
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-the-core-3d-logo-editor-screen-that-renders-editable-3d-text-as-a-logo-in-real-time-in-the-browser-including-a-text-input-for-the-brand-name-and-a-selectable-style-e-g-metal-gold-chrome-glass-neon-cinematic",
@@ -107,6 +110,126 @@
         "REQ-12"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-diagnose-the-failed-production-deployment-and-implement-the-minimal-changes-required-so-the-project-builds-and-deploys-successfully-and-the-app-loads-when-opened-in-the-browser",
+      "title": "Diagnose the failed production deployment and implement the minimal changes required so the project builds and deploys successfully, and the app loads when opened in the browser.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-user-facing-fallback-screen-for-critical-startup-failures-e-g-when-the-frontend-cannot-initialize-or-assets-fail-to-load-with-clear-english-guidance-to-refresh-and-retry",
+      "title": "Add a user-facing fallback screen for critical startup failures (e.g., when the frontend cannot initialize or assets fail to load), with clear English guidance to refresh and retry.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-diagnose-and-fix-the-root-cause-of-the-startup-initialization-failure-that-triggers-the-user-facing-startup-error-screen-ensuring-the-app-loads-successfully-in-production-builds-and-in-the-browser",
+      "title": "Diagnose and fix the root cause of the startup initialization failure that triggers the user-facing startup error screen, ensuring the app loads successfully in production builds and in the browser.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-correct-webgl-three-js-renderer-initialization-in-the-editor-viewport-to-avoid-passing-unsupported-parameters-to-the-three-js-renderer-and-to-prevent-post-processing-settings-from-breaking-initialization",
+      "title": "Correct WebGL/Three.js renderer initialization in the editor viewport to avoid passing unsupported parameters to the Three.js renderer and to prevent post-processing settings from breaking initialization.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-preflight-webgl-capability-check-before-mounting-the-3d-viewport-if-webgl-is-unavailable-disabled-show-a-clear-in-app-message-english-explaining-that-webgl-is-required-and-the-editor-cannot-run-in-this-browser-configuration",
+      "title": "Add a preflight WebGL capability check before mounting the 3D viewport; if WebGL is unavailable/disabled, show a clear in-app message (English) explaining that WebGL is required and the editor cannot run in this browser configuration.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-enhance-the-startup-fallback-screen-to-optionally-display-technical-error-details-captured-by-the-startup-error-boundary-message-stack-when-available-with-a-copy-to-clipboard-action-while-keeping-the-default-view-user-friendly-and-non-technical",
+      "title": "Enhance the startup fallback screen to optionally display technical error details captured by the startup error boundary (message + stack when available) with a copy-to-clipboard action, while keeping the default view user-friendly and non-technical.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-prevent-post-processing-initialization-failures-from-crashing-the-entire-app-if-effectcomposer-bloom-setup-fails-gracefully-disable-post-processing-e-g-set-bloomenabled-to-false-for-the-session-and-continue-rendering-the-3d-scene-without-triggering-the-global-startuperrorboundary",
+      "title": "Prevent post-processing initialization failures from crashing the entire app. If EffectComposer / bloom setup fails, gracefully disable post-processing (e.g., set bloomEnabled to false for the session) and continue rendering the 3D scene without triggering the global StartupErrorBoundary.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-harden-webgl-capability-checks-and-initialization-update-the-webgl-availability-detection-to-be-more-reliable-prefer-webgl2-when-available-detect-context-creation-failures-and-add-handling-for-webgl-context-loss-restoration-so-the-viewport-does-not-get-stuck-in-a-broken-state",
+      "title": "Harden WebGL capability checks and initialization: update the WebGL availability detection to be more reliable (prefer WebGL2 when available; detect context creation failures) and add handling for WebGL context loss/restoration so the viewport does not get stuck in a broken state.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-renderer-configuration-in-the-viewport-cannot-cause-startup-failure-remove-or-refactor-any-renderer-state-mutations-during-canvas-creation-that-can-conflict-with-post-processing-e-g-autoclear-toggling-so-renderer-initialization-remains-stable-regardless-of-bloom-toggle-state",
+      "title": "Ensure renderer configuration in the viewport cannot cause startup failure: remove or refactor any renderer state mutations during Canvas creation that can conflict with post-processing (e.g., autoClear toggling) so renderer initialization remains stable regardless of bloom toggle state.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-diagnostic-details-captured-during-initialization-failures-by-augmenting-the-startup-error-details-with-relevant-webgl-renderer-info-when-available-e-g-webgl-version-renderer-vendor-strings-while-keeping-default-user-facing-messaging-in-english-and-non-technical",
+      "title": "Improve diagnostic details captured during initialization failures by augmenting the startup error details with relevant WebGL/renderer info when available (e.g., WebGL version, renderer/vendor strings), while keeping default user-facing messaging in English and non-technical.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-selected-button-element-at-xpath-html-1-body-1-div-1-div-1-div-1-div-3-button-1-the-free-plan-button-in-frontend-src-features-pro-freevspropanel-tsx-so-the-app-can-be-used-for-free-without-being-blocked-by-that-button-state-the-button-must-not-be-disabled-in-free-mode-and-clicking-it-must-not-ever-switch-the-user-into-pro-mode-if-the-user-is-currently-in-pro-mode-clicking-this-button-should-switch-them-back-to-free-mode",
+      "title": "Update ONLY the selected button element at XPath /html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/button[1] (the Free plan button in frontend/src/features/pro/FreeVsProPanel.tsx) so the app can be used for free without being blocked by that button state: the button must not be disabled in Free mode, and clicking it must not ever switch the user into Pro mode. If the user is currently in Pro mode, clicking this button should switch them back to Free mode.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-free-plan-button-element-at-xpath-html-1-body-1-div-1-div-1-div-1-div-3-button-1-in-frontend-src-features-pro-freevspropanel-tsx-so-the-app-can-be-used-for-free-without-being-blocked-1-the-button-must-not-be-disabled-when-the-user-is-in-free-mode-2-clicking-the-button-while-in-free-mode-must-not-switch-the-user-into-pro-mode-and-3-clicking-the-button-while-in-pro-mode-must-switch-the-user-back-to-free-mode",
+      "title": "Update ONLY the Free plan button element at XPath /html[1]/body[1]/div[1]/div[1]/div[1]/div[3]/button[1] in frontend/src/features/pro/FreeVsProPanel.tsx so the app can be used for free without being blocked: (1) the button must not be disabled when the user is in Free mode, (2) clicking the button while in Free mode must not switch the user into Pro mode, and (3) clicking the button while in Pro mode must switch the user back to Free mode.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-diagnose-and-fix-the-root-cause-of-the-startup-failure-that-triggers-the-global-startuperrorboundary-so-the-app-reliably-loads-to-the-main-ui-editor-tab-in-production-builds-instead-of-showing-the-message-the-app-encountered-a-startup-problem",
+      "title": "Diagnose and fix the root cause of the startup failure that triggers the global StartupErrorBoundary so the app reliably loads to the main UI (Editor tab) in production builds instead of showing the message \"The app encountered a startup problem\".",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-harden-3d-viewport-initialization-so-failures-in-webgl-renderer-creation-or-post-processing-setup-cannot-crash-the-entire-application-instead-gracefully-fall-back-to-a-working-editor-viewport-without-post-processing-when-possible-and-only-show-startupfallbackscreen-when-the-app-truly-cannot-start",
+      "title": "Harden 3D viewport initialization so failures in WebGL renderer creation or post-processing setup cannot crash the entire application; instead, gracefully fall back to a working editor viewport without post-processing when possible, and only show StartupFallbackScreen when the app truly cannot start.",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-startup-error-diagnostics-are-actionable-when-startupfallbackscreen-is-shown-it-must-consistently-include-the-captured-error-message-stack-when-available-plus-webgl-diagnostics-and-the-copy-details-action-must-copy-both-sections-as-plain-text",
+      "title": "Ensure startup error diagnostics are actionable: when StartupFallbackScreen is shown, it must consistently include the captured error message/stack (when available) plus WebGL diagnostics, and the \"Copy details\" action must copy both sections as plain text.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -168,6 +291,14 @@
       "id": "AR-10",
       "summary": "Monetization model: Free + Pro pricing/feature gating plan",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Ensure the backend canister builds and deploys cleanly (even if it remains a minimal actor), and confirm the frontend can load without requiring any backend calls.",
+      "reqIds": [
+        "REQ-15"
+      ],
       "status": "pending"
     }
   ],

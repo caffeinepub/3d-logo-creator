@@ -64,7 +64,15 @@ export function FreeVsProPanel() {
             </div>
           </CardHeader>
           <CardContent>
-            <Button variant={!isPro ? 'default' : 'outline'} className="w-full" disabled={!isPro} onClick={togglePro}>
+            <Button 
+              variant={!isPro ? 'default' : 'outline'} 
+              className="w-full" 
+              onClick={() => {
+                if (isPro) {
+                  togglePro();
+                }
+              }}
+            >
               {!isPro ? 'Current Plan' : 'Switch to Free'}
             </Button>
           </CardContent>

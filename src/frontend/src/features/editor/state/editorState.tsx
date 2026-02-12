@@ -55,6 +55,10 @@ export interface EditorState {
   // Animation
   isAnimating: boolean;
   animationSpeed: number;
+
+  // Session state
+  postProcessingDisabled: boolean;
+  postProcessingError: string | null;
 }
 
 const defaultState: EditorState = {
@@ -90,6 +94,8 @@ const defaultState: EditorState = {
   backgroundMode: 'DarkStage',
   isAnimating: false,
   animationSpeed: 1,
+  postProcessingDisabled: false,
+  postProcessingError: null,
 };
 
 interface EditorContextValue {
@@ -97,6 +103,7 @@ interface EditorContextValue {
   updateState: (updates: Partial<EditorState>) => void;
   resetTransform: () => void;
   applyBrandPreset: (preset: BrandPreset) => void;
+  disablePostProcessing: (errorMessage: string) => void;
 }
 
 const EditorContext = createContext<EditorContextValue | undefined>(undefined);
@@ -114,6 +121,15 @@ export function EditorStateProvider({ children }: { children: ReactNode }) {
       rotationX: 0,
       rotationY: 0,
       rotationZ: 0,
+    }));
+  }, []);
+
+  const disablePostProcessing = useCallback((errorMessage: string) => {
+    setState((prev) => ({
+      ...prev,
+      bloomEnabled: false,
+      postProcessingDisabled: true,
+      postProcessingError: errorMessage,
     }));
   }, []);
 
@@ -185,7 +201,7 @@ export function EditorStateProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <EditorContext.Provider value={{ state, updateState, resetTransform, applyBrandPreset }}>
+    <EditorContext.Provider value={{ state, updateState, resetTransform, applyBrandPreset, disablePostProcessing }}>
       {children}
     </EditorContext.Provider>
   );

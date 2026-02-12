@@ -1,258 +1,75 @@
 {
   "kind": "build_request",
-  "title": "Cinematic 3D Logo Creator (DaVinci-inspired) with 3D controls, presets, effects, and exports",
-  "priority": "normal",
+  "title": "Fix persistent startup initialization failure (StartupFallbackScreen shown)",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Create the core 3D Logo Editor screen that renders editable 3D text as a logo in real time in the browser, including a text input for the brand name and a selectable style (e.g., Metal, Gold, Chrome, Glass, Neon, Cinematic).",
+      "id": "REQ-26",
+      "text": "Diagnose and fix the root cause of the startup failure that triggers the global StartupErrorBoundary so the app reliably loads to the main UI (Editor tab) in production builds instead of showing the message \"The app encountered a startup problem\".",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "3D Logo Generator\n\nText-to-logo AI (user enters brand name & style)\n\nMultiple 3D logo styles (metal, gold, chrome, glass, neon, cinematic)"
+          "The app encountered a startup problem\nFix this"
         ]
       },
       "acceptanceCriteria": [
-        "User can enter a brand name and see a 3D text logo rendered in the viewport",
-        "User can switch among at least 6 styles (Metal, Gold, Chrome, Glass, Neon, Cinematic) and see visible material/lighting changes",
-        "Rendering remains interactive (orbit/pan/zoom or equivalent camera controls)"
+        "In a production build, opening the app shows the normal App UI (header + tabs + editor layout) and does not immediately render StartupFallbackScreen.",
+        "No uncaught errors or unhandled promise rejections occur during initial mount that cause StartupErrorBoundary to enter the error state.",
+        "If an error still occurs, the error is attributable to a clearly identified failing module and is handled or guarded so it does not crash the entire app unless truly unrecoverable."
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Implement Advanced 3D Controls for the logo geometry and transform: extrusion depth, bevel amount/edge smoothness, and rotation controls for X/Y/Z axes.",
+      "id": "REQ-27",
+      "text": "Harden 3D viewport initialization so failures in WebGL renderer creation or post-processing setup cannot crash the entire application; instead, gracefully fall back to a working editor viewport without post-processing when possible, and only show StartupFallbackScreen when the app truly cannot start.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "Advanced 3D Controls\n\nExtrusion depth\n\nBevel & edge smoothness\n\nRotation (X, Y, Z axis)"
+          "Fix this"
         ]
       },
       "acceptanceCriteria": [
-        "Extrusion depth slider updates the 3D logo depth live",
-        "Bevel/smoothness control(s) visibly change edges (e.g., bevel size/segments)",
-        "Rotation X/Y/Z controls update the logo orientation live and can be reset to defaults"
+        "If post-processing (EffectComposer/bloom) initialization or render fails, the session continues rendering the core 3D scene and clearly indicates that effects were disabled (without tripping StartupErrorBoundary).",
+        "If WebGL is unavailable, the app renders the in-app WebGL-required message from the viewport area (not the global StartupFallbackScreen).",
+        "The app does not get stuck in a broken state after a WebGL context loss; the viewport shows the context-lost message and instructs the user to reload."
       ]
     },
     {
-      "id": "REQ-3",
-      "text": "Add Lighting + Shadows/Reflections controls, including light angle/direction and intensity, plus toggles/sliders for shadow strength and reflection/metalness-like behavior appropriate to the selected style.",
+      "id": "REQ-28",
+      "text": "Ensure startup error diagnostics are actionable: when StartupFallbackScreen is shown, it must consistently include the captured error message/stack (when available) plus WebGL diagnostics, and the \"Copy details\" action must copy both sections as plain text.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-4"
         ],
         "quotes": [
-          "Lighting angle & intensity\nnShadow & reflection controls"
+          "The app encountered a startup problem"
         ]
       },
       "acceptanceCriteria": [
-        "User can adjust light direction/angle and intensity and see the logo lighting change in real time",
-        "User can enable/disable shadows and adjust their strength/softness within a reasonable range",
-        "User can adjust a reflection/metallic-like control (implementation-dependent) and see a visible change on reflective styles (e.g., Gold/Chrome)"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Provide a Material & Texture system with: preset materials (Gold, Silver, Matte, Carbon Fiber, Marble), roughness and gloss (or equivalent) sliders, and custom texture upload that applies to the logo material where supported.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Material & Texture System\n\nGold, silver, matte, carbon fiber, marble\n\nCustom texture upload\n\nRoughness & gloss sliders"
-        ]
-      },
-      "acceptanceCriteria": [
-        "User can select each preset material and see a distinct visual result",
-        "Roughness and gloss (or equivalent parameters) sliders visibly affect highlights/reflections",
-        "User can upload an image file and see it applied as a texture to the logo (with a clear way to remove/reset it)"
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Add Cinematic Effects controls for glow/bloom and rim lighting, plus at least one particle-based effect option (smoke OR sparks) that can be toggled on/off and parameterized (e.g., intensity/density).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Cinematic Effects\n\nGlow, bloom, rim light\n\nSmoke, sparks, particles"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Bloom/glow can be enabled and intensity adjusted with an obvious visual change",
-        "Rim light can be enabled/adjusted with an obvious edge highlight change",
-        "At least one particle effect (smoke or sparks) can be enabled/disabled and its intensity/density changed"
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Implement motion blur and depth-of-field style controls for the viewport render (where feasible in real time), with an on/off toggle and at least one adjustable parameter for each effect.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Motion blur & depth of field"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Depth of field can be toggled and adjusted (e.g., focus distance/aperture) with visible blur changes",
-        "Motion blur can be toggled and adjusted (e.g., strength) with visible effect during rotation/animation playback"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Add Background & Scene options: Studio background, Dark cinematic stage, Gradient background, and Transparent background modes. Ensure background selection affects exports as expected.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Background & Scene\n\nStudio background\n\nDark cinematic stage\n\nGradient & transparent background"
-        ]
-      },
-      "acceptanceCriteria": [
-        "User can switch between Studio, Dark stage, Gradient, and Transparent background modes",
-        "Transparent mode renders the logo without an opaque background in the viewport (checkerboard or similar preview allowed)",
-        "Exports respect the selected background mode (transparent exports preserve alpha when applicable)"
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Implement Export Options: PNG with transparency, JPG at up to 4K resolution, SVG export for logo use (provide a best-effort vector representation of the logo mark/text), and an animation export of a rotating logo as a downloadable video.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Export Options\n\nPNG (transparent)\n\nJPG (4K)\n\nSVG (logo use)\n\nMP4 rotating 3D logo animation export"
-        ]
-      },
-      "acceptanceCriteria": [
-        "PNG export produces a downloadable file and preserves transparency when Transparent background is selected",
-        "JPG export produces a downloadable file and supports a 4K option (e.g., 3840×2160)",
-        "SVG export produces a downloadable .svg file representing the logo (at minimum a clean vector text/outline representation)",
-        "Animation export produces a downloadable video file of a rotating logo for a fixed duration (e.g., 3–6 seconds)",
-        "If MP4 is not supported by the browser’s recording pipeline, provide a clearly labeled fallback export format (e.g., WebM) while keeping the UI label explicit about the actual format"
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Create Brand Presets (Luxury, Tech, Spiritual, Gaming, Corporate) that apply a coherent combination of style/material/lighting/effects/background defaults and can be used as one-click starting points.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Brand Presets\n\nLuxury\n\nTech\n\nSpiritual\n\nGaming\n\nCorporate"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Each preset applies multiple settings at once (not just a single dropdown)",
-        "Switching presets yields clearly distinct looks",
-        "Users can modify settings after applying a preset without breaking the editor"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "text": "Implement a DaVinci Resolve–inspired dark UI with a professional cinematic feel, including: a left panel for presets/assets, a central viewer for the 3D viewport, a right inspector panel for parameters, and timeline-like controls for rotating/animating the logo (keyframes optional). Use English for all user-facing text.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "UI / UX Style\n\nDaVinci Resolve–inspired dark UI\n\nTimeline-like animation controls\n\nDrag-and-drop simplicity\n\nProfessional cinematic feel"
-        ]
-      },
-      "acceptanceCriteria": [
-        "UI uses a consistent dark theme with clear contrast and professional typography",
-        "Layout includes left panel (presets/assets), center viewport, right inspector, and a bottom timeline-like strip for animation playback/scrubbing",
-        "All labels, buttons, helper text, and errors are in English",
-        "Basic drag-and-drop interaction exists for at least one workflow (e.g., dropping a texture image onto the logo/texture slot)"
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "text": "Add an in-app “Architecture & Pipeline” section (or an included documentation page) that describes: app architecture, UI wireframe flow, 3D rendering pipeline, and logo generation logic for the implemented (non-LLM) text-to-logo styling approach, plus include a few representative code snippets from the codebase.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Output Required\n\nApp architecture\n\nUI wireframe flow\n\n3D rendering pipeline\n\nLogo generation logic\n\nSample code snippets"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A dedicated screen/section is accessible from the app UI and contains the requested documentation content",
-        "Documentation includes at least: (1) screen flow, (2) rendering pipeline description, (3) how style presets map to materials/lights/effects, and (4) a few code excerpts",
-        "Content is written in English and matches the app as built"
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "text": "Add a “Free vs Pro” monetization model section in the app (or docs) describing pricing tiers and feature gating, and implement local feature gating in the UI (no payment processing required) so Pro-only features are visibly marked and disabled unless Pro mode is enabled.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "Monetization model (Free + Pro)"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The app includes a clearly readable Free vs Pro plan description in English (features + indicative pricing)",
-        "At least 2–3 advanced features are marked as Pro (e.g., certain effects, 4K export, animation export) and are disabled in Free mode",
-        "A developer/admin toggle (or simple user toggle) exists to switch between Free and Pro for demonstration purposes without integrating external payments"
+        "When StartupFallbackScreen is rendered due to an Error, the \"Technical details\" section shows the error message and stack trace when provided by StartupErrorBoundary.",
+        "The WebGL diagnostics block is populated (or clearly states WebGL is not available) and is included in the copied text.",
+        "Clicking \"Copy details\" copies a single text blob that includes: error message, stack trace (if present), and the full WebGL diagnostics output."
       ]
     }
   ],
   "constraints": [
-    "Use the provided template stack: React + TypeScript with Tailwind/Shadcn and React Query on the frontend, and a single Motoko actor on the backend if any backend storage is needed.",
-    "Do not require or implement Next.js, Node.js, Firebase, external databases, WebSockets, push/email/SMS services, or third-party authentication beyond Internet Identity.",
-    "Do not integrate external LLM/AI services (e.g., OpenAI/Anthropic) for text-to-logo generation; implement a deterministic, local “AI-like” styling/preset approach instead.",
-    "Do not modify files under frontend/src/components/ui or the immutable hook/main paths listed in SYSTEM_CONTEXT; compose them from outside those paths if needed."
+    "Do not edit files under frontend/src/components/ui (Shadcn UI components must be composed, not modified).",
+    "Do not edit immutable hook/bootstrap files: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx.",
+    "Keep all user-facing text in English."
   ],
   "nonGoals": [
-    "Implementing real payment processing and subscription management (only UI gating + documented monetization model is required).",
-    "True AI style transfer or generative model-based logo synthesis using external services.",
-    "Mobile (Android-only) app delivery or no-code (Bubble/FlutterFlow) builds.",
-    "Real-time collaboration or chat features."
+    "Adding new editor features (materials, effects, exports, presets) beyond what is necessary to resolve the startup failure.",
+    "Changing backend canister logic or adding new backend APIs (unless proven necessary for the startup fix).",
+    "Introducing third-party services or new authentication methods."
   ],
   "imageRequirements": {
-    "required": [
-      "App icon: cinematic clapperboard + monogram mark in dark metallic style (app-icon.dim_512x512.png)",
-      "Wide hero background: subtle dark studio gradient with soft film grain and faint bokeh (hero-bg.dim_1920x1080.png)"
-    ],
+    "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [
-      "Build a DaVinci Resolve–inspired cinematic 3D logo creator web app with advanced 3D/material controls, effects, presets, and export options."
-    ],
-    "goalsToRemove": [],
-    "preferencesToAdd": [
-      "All user-facing text must be in English."
-    ],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }
