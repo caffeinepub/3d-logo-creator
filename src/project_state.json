@@ -1,0 +1,178 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Build a professional, DaVinci Resolve–inspired web app for cinematic 3D logo creation with AI text-to-logo generation, advanced 3D/material controls, cinematic effects, scene/background tools, and export (static + animation), using React/Next.js with Three.js/Babylon.js and a Node.js/Firebase backend.",
+  "architectural_notes": [
+    "Frontend: React / Next.js",
+    "3D engine: Three.js or Babylon.js (WebGL)",
+    "Backend: Node.js with Firebase",
+    "AI components: Text-to-Design + Style Transfer"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- App icon: cinematic clapperboard + monogram mark in dark metallic style (app-icon.dim_512x512.png)\n- Wide hero background: subtle dark studio gradient with soft film grain and faint bokeh (hero-bg.dim_1920x1080.png)",
+  "existing_features": [
+    {
+      "id": "feature-create-the-core-3d-logo-editor-screen-that-renders-editable-3d-text-as-a-logo-in-real-time-in-the-browser-including-a-text-input-for-the-brand-name-and-a-selectable-style-e-g-metal-gold-chrome-glass-neon-cinematic",
+      "title": "Create the core 3D Logo Editor screen that renders editable 3D text as a logo in real time in the browser, including a text input for the brand name and a selectable style (e.g., Metal, Gold, Chrome, Glass, Neon, Cinematic).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-advanced-3d-controls-for-the-logo-geometry-and-transform-extrusion-depth-bevel-amount-edge-smoothness-and-rotation-controls-for-x-y-z-axes",
+      "title": "Implement Advanced 3D Controls for the logo geometry and transform: extrusion depth, bevel amount/edge smoothness, and rotation controls for X/Y/Z axes.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-lighting-shadows-reflections-controls-including-light-angle-direction-and-intensity-plus-toggles-sliders-for-shadow-strength-and-reflection-metalness-like-behavior-appropriate-to-the-selected-style",
+      "title": "Add Lighting + Shadows/Reflections controls, including light angle/direction and intensity, plus toggles/sliders for shadow strength and reflection/metalness-like behavior appropriate to the selected style.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-provide-a-material-texture-system-with-preset-materials-gold-silver-matte-carbon-fiber-marble-roughness-and-gloss-or-equivalent-sliders-and-custom-texture-upload-that-applies-to-the-logo-material-where-supported",
+      "title": "Provide a Material & Texture system with: preset materials (Gold, Silver, Matte, Carbon Fiber, Marble), roughness and gloss (or equivalent) sliders, and custom texture upload that applies to the logo material where supported.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-cinematic-effects-controls-for-glow-bloom-and-rim-lighting-plus-at-least-one-particle-based-effect-option-smoke-or-sparks-that-can-be-toggled-on-off-and-parameterized-e-g-intensity-density",
+      "title": "Add Cinematic Effects controls for glow/bloom and rim lighting, plus at least one particle-based effect option (smoke OR sparks) that can be toggled on/off and parameterized (e.g., intensity/density).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-motion-blur-and-depth-of-field-style-controls-for-the-viewport-render-where-feasible-in-real-time-with-an-on-off-toggle-and-at-least-one-adjustable-parameter-for-each-effect",
+      "title": "Implement motion blur and depth-of-field style controls for the viewport render (where feasible in real time), with an on/off toggle and at least one adjustable parameter for each effect.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-background-scene-options-studio-background-dark-cinematic-stage-gradient-background-and-transparent-background-modes-ensure-background-selection-affects-exports-as-expected",
+      "title": "Add Background & Scene options: Studio background, Dark cinematic stage, Gradient background, and Transparent background modes. Ensure background selection affects exports as expected.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-export-options-png-with-transparency-jpg-at-up-to-4k-resolution-svg-export-for-logo-use-provide-a-best-effort-vector-representation-of-the-logo-mark-text-and-an-animation-export-of-a-rotating-logo-as-a-downloadable-video",
+      "title": "Implement Export Options: PNG with transparency, JPG at up to 4K resolution, SVG export for logo use (provide a best-effort vector representation of the logo mark/text), and an animation export of a rotating logo as a downloadable video.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-brand-presets-luxury-tech-spiritual-gaming-corporate-that-apply-a-coherent-combination-of-style-material-lighting-effects-background-defaults-and-can-be-used-as-one-click-starting-points",
+      "title": "Create Brand Presets (Luxury, Tech, Spiritual, Gaming, Corporate) that apply a coherent combination of style/material/lighting/effects/background defaults and can be used as one-click starting points.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-davinci-resolve-inspired-dark-ui-with-a-professional-cinematic-feel-including-a-left-panel-for-presets-assets-a-central-viewer-for-the-3d-viewport-a-right-inspector-panel-for-parameters-and-timeline-like-controls-for-rotating-animating-the-logo-keyframes-optional-use-english-for-all-user-facing-text",
+      "title": "Implement a DaVinci Resolve–inspired dark UI with a professional cinematic feel, including: a left panel for presets/assets, a central viewer for the 3D viewport, a right inspector panel for parameters, and timeline-like controls for rotating/animating the logo (keyframes optional). Use English for all user-facing text.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-in-app-architecture-pipeline-section-or-an-included-documentation-page-that-describes-app-architecture-ui-wireframe-flow-3d-rendering-pipeline-and-logo-generation-logic-for-the-implemented-non-llm-text-to-logo-styling-approach-plus-include-a-few-representative-code-snippets-from-the-codebase",
+      "title": "Add an in-app “Architecture & Pipeline” section (or an included documentation page) that describes: app architecture, UI wireframe flow, 3D rendering pipeline, and logo generation logic for the implemented (non-LLM) text-to-logo styling approach, plus include a few representative code snippets from the codebase.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-free-vs-pro-monetization-model-section-in-the-app-or-docs-describing-pricing-tiers-and-feature-gating-and-implement-local-feature-gating-in-the-ui-no-payment-processing-required-so-pro-only-features-are-visibly-marked-and-disabled-unless-pro-mode-is-enabled",
+      "title": "Add a “Free vs Pro” monetization model section in the app (or docs) describing pricing tiers and feature gating, and implement local feature gating in the UI (no payment processing required) so Pro-only features are visibly marked and disabled unless Pro mode is enabled.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "3D Logo Generator with AI text-to-logo (brand name + style) and multiple cinematic 3D logo styles (metal/gold/chrome/glass/neon)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Advanced 3D controls: extrusion depth, bevel/edge smoothness, XYZ rotation, lighting angle/intensity, shadow/reflection controls",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Material & texture system: preset materials (gold/silver/matte/carbon fiber/marble), custom texture upload, roughness/gloss sliders",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Cinematic effects: glow/bloom/rim light, smoke/sparks/particles, motion blur, depth of field",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Background & scene options: studio background, dark cinematic stage, gradient background, transparent background",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Export options: PNG (transparent), JPG (4K), SVG, MP4 rotating 3D logo animation export",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Brand presets: Luxury, Tech, Spiritual, Gaming, Corporate (style presets to drive look/materials/lighting)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "DaVinci Resolve–inspired dark UI/UX with drag-and-drop simplicity and timeline-like animation controls",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Architecture deliverables: app architecture, UI wireframe flow, 3D rendering pipeline, logo generation logic, sample code snippets",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Monetization model: Free + Pro pricing/feature gating plan",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "3D Logo Creator",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

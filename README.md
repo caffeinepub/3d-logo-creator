@@ -1,2 +1,3 @@
-# 3d-logo-creator
-Exported from Caffeine project: 3D Logo Creator
+## 3D Logo Creator
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`
